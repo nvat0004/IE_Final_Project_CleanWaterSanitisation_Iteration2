@@ -1,0 +1,30 @@
+body {
+background: #ffffff;
+color: #0f172a;
+}
+
+
+.app-hero h1 {
+font-weight: 700;
+letter-spacing: 0.3px;
+}
+
+
+.app-hero p {
+color: #475569;
+margin-bottom: 1.25rem;
+}
+
+
+.stat-card, .section-card {
+border: 1px solid #e5e7eb;
+border-radius: 12px;
+padding: 20px;
+background: #fff;
+}
+
+
+.logo-img {
+height: 36px;
+width: auto;
+}

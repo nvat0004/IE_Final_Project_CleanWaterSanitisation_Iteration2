@@ -1,0 +1,30 @@
+{
+  "name": "clean-water-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:backend": "node backend/src/server.js",
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "build:frontend": "cd frontend && rimraf dist && npm ci && npm run build",
+    "build": "npm run build:frontend",
+    "start": "node backend/src/server.js",
+    "seed": "node backend/scripts/seed.js",
+    "dev:frontend": "cd frontend && npx vite"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "rimraf": "^6.0.1"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
+    "csv-parser": "^3.2.0",
+    "dayjs": "^1.11.18",
+    "dotenv": "^17.2.2",
+    "express": "^4.19.2",
+    "mysql2": "^3.14.4",
+    "papaparse": "^5.5.3"
+  }
+}
