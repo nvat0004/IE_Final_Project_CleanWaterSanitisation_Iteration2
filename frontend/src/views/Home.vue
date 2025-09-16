@@ -2,123 +2,143 @@
   <div class="home-wrapper text-white">
     <div class="container py-5">
       <!-- Header Section -->
-      <header class="text-center mb-5">
-        <h1 class="display-4 fw-bold">
-          <i class="fas fa-water me-2"></i> Keep Your Family Safe at Beach
-        </h1>
-        <p class="lead text-light">
-          Get real-time water quality updates and make informed decisions about beach safety after rainfall.
-        </p>
+      <header class="page-header text-center mb-5">
+        <div class="header-content">
+          <h1 class="display-4 fw-bold">
+            <i class="fas fa-water me-2"></i> Keep Your Family Safe at Beach
+          </h1>
+          <p class="lead text-light">
+            Get real-time water quality updates and make informed decisions about beach safety after rainfall.
+          </p>
+        </div>
       </header>
 
       <!-- Beach Conditions Dashboard -->
-<section class="mb-5">
-  <h2 class="text-center mb-4 text-primary fw-bold">Beach Conditions Dashboard</h2>
-  <div class="row g-4 justify-content-center">
-
-    <!-- UV Index -->
-    <div class="col-md-6 col-lg-3">
-      <router-link to="/weather" class="card-link">
-        <div class="dashboard-card gradient-orange">
-          <h5 class="card-header"><span>☀️</span> UV Index</h5>
-          <div class="card-body">
-            <p class="card-subtitle">UV index and sun safety information</p>
-            <div class="data-box">
-              <p v-if="isLoadingUv">Loading...</p>
-              <p v-else-if="uvError" class="text-danger">{{ uvError }}</p>
-              <p v-else class="display-6 fw-bold">{{ uvIndex ?? '-' }}</p>
-            </div>
-          </div>
+      <section class="dashboard-section mb-5">
+        <div class="dashboard-header">
+          <h2 class="text-center mb-4 text-primary fw-bold">Beach Conditions Dashboard</h2>
         </div>
-      </router-link>
-    </div>
-
-    <!-- Weather Conditions -->
-    <div class="col-md-6 col-lg-3">
-      <router-link to="/weather" class="card-link">
-        <div class="dashboard-card gradient-blue">
-          <h5 class="card-header"><span>🌤️</span> Weather Conditions</h5>
-          <div class="card-body">
-            <p class="card-subtitle">Current weather data</p>
-            <div class="data-box">
-              <div v-if="isLoadingWeather">Loading...</div>
-              <div v-else-if="weatherError" class="text-danger">{{ weatherError }}</div>
-              <div v-else>
-                <p><strong>{{ weather?.temp }}°C</strong></p>
-                <p>{{ weather?.description }}</p>
-                <p>Humidity: {{ weather?.humidity }}%</p>
-                <p>Wind: {{ weather?.windSpeed }} m/s</p>
+        <div class="dashboard-grid row g-4 justify-content-center">
+          
+          <!-- UV Index Card -->
+          <div class="col-md-6 col-lg-3">
+            <router-link to="/weather" class="card-link">
+              <div class="dashboard-card gradient-orange">
+                <div class="card-header">
+                  <h5><span>☀️</span> UV Index</h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-subtitle">UV index and sun safety information</p>
+                  <div class="data-box">
+                    <p v-if="isLoadingUv">Loading...</p>
+                    <p v-else-if="uvError" class="text-danger">{{ uvError }}</p>
+                    <p v-else class="display-6 fw-bold">{{ uvIndex ?? '-' }}</p>
+                  </div>
+                </div>
               </div>
-            </div>
+            </router-link>
           </div>
-        </div>
-      </router-link>
-    </div>
 
-    <!-- Swimming Safety -->
-    <div class="col-md-6 col-lg-3">
-      <router-link to="/safety" class="card-link">
-        <div class="dashboard-card gradient-teal">
-          <h5 class="card-header"><span>🏊</span> Swimming Safety</h5>
-          <div class="card-body">
-            <p class="card-subtitle">Today's safety status</p>
-            <div class="data-box">
-              <p class="text-muted">Click to view full details</p>
-            </div>
+          <!-- Weather Conditions Card -->
+          <div class="col-md-6 col-lg-3">
+            <router-link to="/weather" class="card-link">
+              <div class="dashboard-card gradient-blue">
+                <div class="card-header">
+                  <h5><span>🌤️</span> Weather Conditions</h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-subtitle">Current weather data</p>
+                  <div class="data-box">
+                    <div v-if="isLoadingWeather">Loading...</div>
+                    <div v-else-if="weatherError" class="text-danger">{{ weatherError }}</div>
+                    <div v-else>
+                      <p><strong>{{ weather?.temp }}°C</strong></p>
+                      <p>{{ weather?.description }}</p>
+                      <p>Humidity: {{ weather?.humidity }}%</p>
+                      <p>Wind: {{ weather?.windSpeed }} m/s</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </router-link>
           </div>
-        </div>
-      </router-link>
-    </div>
 
-    <!-- 7-Day Prediction -->
-    <div class="col-md-6 col-lg-3">
-      <router-link to="/predict" class="card-link">
-        <div class="dashboard-card gradient-purple">
-          <h5 class="card-header"><span>🔮</span> Prediction Model Results</h5>
-          <div class="card-body">
-            <p class="card-subtitle">Water quality predictions</p>
-            <div class="data-box">
-              <p class="text-muted">Click here to view forecasts</p>
-            </div>
+          <!-- Swimming Safety Card -->
+          <div class="col-md-6 col-lg-3">
+            <router-link to="/safety" class="card-link">
+              <div class="dashboard-card gradient-teal">
+                <div class="card-header">
+                  <h5><span>🏊</span> Swimming Safety</h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-subtitle">Today's safety status</p>
+                  <div class="data-box">
+                    <p class="text-muted">Click to view full details</p>
+                  </div>
+                </div>
+              </div>
+            </router-link>
           </div>
-        </div>
-      </router-link>
-    </div>
 
-    <!-- ♻️ Trash Quiz (New) -->
-    <div class="col-md-6 col-lg-3">
-      <router-link to="/recycle-quiz" class="card-link">
-        <div class="dashboard-card gradient-green">
-          <h5 class="card-header"><span>🗑️</span> Trash Quiz</h5>
-          <div class="card-body">
-            <p class="card-subtitle">Test your recycling knowledge</p>
-            <div class="data-box">
-              <p class="text-muted">Play now & learn about Aussie bin rules!</p>
-            </div>
+          <!-- 7-Day Prediction Card -->
+          <div class="col-md-6 col-lg-3">
+            <router-link to="/predict" class="card-link">
+              <div class="dashboard-card gradient-purple">
+                <div class="card-header">
+                  <h5><span>🔮</span> Prediction Model Results</h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-subtitle">Water quality predictions</p>
+                  <div class="data-box">
+                    <p class="text-muted">Click here to view forecasts</p>
+                  </div>
+                </div>
+              </div>
+            </router-link>
           </div>
+
+          <!-- Trash Quiz Card -->
+          <div class="col-md-6 col-lg-3">
+            <router-link to="/recycle-quiz" class="card-link">
+              <div class="dashboard-card gradient-green">
+                <div class="card-header">
+                  <h5><span>🗑️</span> Trash Quiz</h5>
+                </div>
+                <div class="card-body">
+                  <p class="card-subtitle">Test your recycling knowledge</p>
+                  <div class="data-box">
+                    <p class="text-muted">Play now & learn about Aussie bin rules!</p>
+                  </div>
+                </div>
+              </div>
+            </router-link>
+          </div>
+
         </div>
-      </router-link>
-    </div>
-
-  </div>
-</section>
-
-      <!-- Articles Section -->
-      <section class="mb-5">
-        <h3 class="text-center mb-4"><i class="fas fa-newspaper me-2"></i> Articles</h3>
-        <ul class="article-list">
-          <li v-for="(article, i) in articleLinks" :key="i">
-            <a :href="article.url" target="_blank">{{ article.title }}</a>
-          </li>
-        </ul>
       </section>
 
-      <!-- What We Provide -->
-      <section class="mb-5">
-        <h3 class="text-center mb-4">What We Provide</h3>
-        <div class="row text-center g-4">
+      <!-- Articles Section -->
+      <section class="articles-section mb-5">
+        <div class="articles-header">
+          <h3 class="text-center mb-4"><i class="fas fa-newspaper me-2"></i> Articles</h3>
+        </div>
+        <div class="articles-content">
+          <ul class="article-list">
+            <li v-for="(article, i) in articleLinks" :key="i">
+              <a :href="article.url" target="_blank">{{ article.title }}</a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="features-section mb-5">
+        <div class="features-header">
+          <h3 class="text-center mb-4">What We Provide</h3>
+        </div>
+        <div class="features-grid row text-center g-4">
           <div v-for="(item, i) in features" :key="i" class="col-md-4">
-            <div class="card p-4 shadow-lg border-0 rounded-4 h-100">
+            <div class="feature-card card p-4 shadow-lg border-0 rounded-4 h-100">
               <h5 class="fw-bold">{{ item.icon }} {{ item.title }}</h5>
               <p class="text-muted">{{ item.description }}</p>
             </div>
@@ -126,12 +146,14 @@
         </div>
       </section>
 
-      <!-- Who We Help -->
-      <section class="mb-5">
-        <h3 class="text-center mb-4">Who We Help</h3>
-        <div class="row text-center g-4">
+      <!-- Audiences Section -->
+      <section class="audiences-section mb-5">
+        <div class="audiences-header">
+          <h3 class="text-center mb-4">Who We Help</h3>
+        </div>
+        <div class="audiences-grid row text-center g-4">
           <div v-for="(group, i) in audiences" :key="i" class="col-md-4">
-            <div class="card p-4 shadow-lg border-0 rounded-4 h-100">
+            <div class="audience-card card p-4 shadow-lg border-0 rounded-4 h-100">
               <h5 class="fw-bold">{{ group.icon }} {{ group.title }}</h5>
               <p class="text-muted">{{ group.description }}</p>
             </div>
@@ -139,20 +161,22 @@
         </div>
       </section>
 
-      <!-- Footer -->
-      <footer class="footer text-center text-white py-4 mt-5" style="background: linear-gradient(to right, #1565c0, #1976d2);">
-        <div>
+      <!-- Footer Section -->
+      <footer class="page-footer footer text-center text-white py-4 mt-5" style="background: linear-gradient(to right, #1565c0, #1976d2);">
+        <div class="footer-content">
           <small>© 2025 AquaProtect - TA22 Team</small><br />
           <small>Keeping families safe at Dromana Beach</small>
         </div>
       </footer>
 
-      <!-- Back to Top Button -->
-      <div class="text-center">
-        <button class="btn btn-outline-light rounded-pill shadow-sm" @click="scrollToTop">
-          <i class="fas fa-arrow-up"></i> Back to Top
-        </button>
-      </div>
+      <!-- Navigation Section -->
+      <nav class="navigation-section text-center">
+        <div class="back-to-top-wrapper">
+          <button class="btn btn-outline-light rounded-pill shadow-sm" @click="scrollToTop">
+            <i class="fas fa-arrow-up"></i> Back to Top
+          </button>
+        </div>
+      </nav>
     </div>
   </div>
 </template>
