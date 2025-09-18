@@ -1,256 +1,148 @@
 <template>
-  <div class="home-wrapper text-dark">
-    <div class="container py-5">
-      <!-- Header Section -->
-      <header class="page-header text-center mb-5">
-        <div class="header-content">
-          <h1 class="main-title">
-            <i class="fas fa-water me-2"></i> Keep Your Family Safe at Beach
-          </h1>
-          <p class="main-subtitle">
-            Get real-time water quality updates and make informed decisions about beach safety after rainfall.
-          </p>
-        </div>
-      </header>
+  <div class="home">
+    <!-- Hero Video Section -->
+    <HeroVideo :dashboardRef="dashboardRef" :featuresRef="featuresRef" />
 
-      <!-- Beach Conditions Dashboard -->
-      <section class="dashboard-section mb-5">
-        <div class="dashboard-header">
-          <h2 class="section-title">Beach Conditions Dashboard</h2>
-        </div>
-        
-        <!-- Main Dashboard Container -->
-        <div class="dashboard-container">
-          <div class="dashboard-grid row g-4 justify-content-center">
-          
-          <!-- UV Index Card -->
-          <div class="col-md-6 col-lg-3">
-            <router-link to="/weather" class="card-link">
-              <Card class="dashboard-card gradient-orange">
-                <template #header>
-                  <div class="card-header">
-                    <h5 class="card-title"><span>☀️</span> UV Index</h5>
-                  </div>
-                </template>
-                <template #content>
-                  <div class="card-body">
-                    <p class="card-subtitle">UV index and sun safety information</p>
-                    <div class="data-box">
-                      <div v-if="isLoadingUv" class="loading-container">
-                        <ProgressSpinner 
-                          style="width: 2rem; height: 2rem" 
-                          strokeWidth="4"
-                          animationDuration="1s"
-                        />
-                        <p class="mt-2 mb-0">Loading...</p>
-                      </div>
-                      <Message v-else-if="uvError" severity="error" :closable="false" class="w-100">
-                        {{ uvError }}
-                      </Message>
-                      <div v-else class="data-display">
-                        <p class="display-6 fw-bold mb-0">{{ uvIndex ?? '-' }}</p>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-              </Card>
-            </router-link>
-          </div>
-
-          <!-- Weather Conditions Card -->
-          <div class="col-md-6 col-lg-3">
-            <router-link to="/weather" class="card-link">
-              <Card class="dashboard-card gradient-blue">
-                <template #header>
-                  <div class="card-header">
-                    <h5 class="card-title"><span>🌤️</span> Weather Conditions</h5>
-                  </div>
-                </template>
-                <template #content>
-                  <div class="card-body">
-                    <p class="card-subtitle">Current weather data</p>
-                    <div class="data-box">
-                      <div v-if="isLoadingWeather" class="loading-container">
-                        <ProgressSpinner 
-                          style="width: 2rem; height: 2rem" 
-                          strokeWidth="4"
-                          animationDuration="1s"
-                        />
-                        <p class="mt-2 mb-0">Loading...</p>
-                      </div>
-                      <Message v-else-if="weatherError" severity="error" :closable="false" class="w-100">
-                        {{ weatherError }}
-                      </Message>
-                      <div v-else class="weather-data">
-                        <p class="mb-1"><strong>{{ weather?.temp }}°C</strong></p>
-                        <p class="mb-1">{{ weather?.description }}</p>
-                        <p class="mb-1">Humidity: {{ weather?.humidity }}%</p>
-                        <p class="mb-0">Wind: {{ weather?.windSpeed }} m/s</p>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-              </Card>
-            </router-link>
-          </div>
-
-          <!-- Swimming Safety Card -->
-          <div class="col-md-6 col-lg-3">
-            <router-link to="/safety" class="card-link">
-              <Card class="dashboard-card gradient-teal">
-                <template #header>
-                  <div class="card-header">
-                    <h5 class="card-title"><span>🏊</span> Swimming Safety</h5>
-                  </div>
-                </template>
-                <template #content>
-                  <div class="card-body">
-                    <p class="card-subtitle">Today's safety status</p>
-                    <div class="data-box">
-                      <p class="placeholder-text mb-0">Click to view full details</p>
-                    </div>
-                  </div>
-                </template>
-              </Card>
-            </router-link>
-          </div>
-
-          <!-- 7-Day Prediction Card -->
-          <div class="col-md-6 col-lg-3">
-            <router-link to="/predict" class="card-link">
-              <Card class="dashboard-card gradient-purple">
-                <template #header>
-                  <div class="card-header">
-                    <h5 class="card-title"><span>🔮</span> Prediction Model Results</h5>
-                  </div>
-                </template>
-                <template #content>
-                  <div class="card-body">
-                    <p class="card-subtitle">Water quality predictions</p>
-                    <div class="data-box">
-                      <p class="placeholder-text mb-0">Click here to view forecasts</p>
-                    </div>
-                  </div>
-                </template>
-              </Card>
-            </router-link>
-          </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Trash Quiz Section - Outside Dashboard -->
-      <section class="quiz-section mb-5">
-        <div class="row justify-content-center">
-          <div class="col-md-6 col-lg-4">
-            <router-link to="/recycle-quiz" class="card-link">
-              <Card class="quiz-card gradient-green">
-                <template #header>
-                  <div class="card-header">
-                    <h5 class="card-title"><span>🗑️</span> Trash Quiz</h5>
-                  </div>
-                </template>
-                <template #content>
-                  <div class="card-body">
-                    <p class="card-subtitle">Test your recycling knowledge</p>
-                    <div class="data-box">
-                      <p class="text-muted mb-0">Play now & learn about Aussie bin rules!</p>
-                    </div>
-                  </div>
-                </template>
-              </Card>
-            </router-link>
-          </div>
-        </div>
-      </section>
-
-      <Divider class="my-5" />
-
-      <!-- Articles Section -->
-      <section class="articles-section mb-5">
-        <div class="articles-header">
-          <h3 class="section-subtitle">
-            <i class="fas fa-newspaper me-2"></i> Articles
-          </h3>
-        </div>
-        <div class="articles-content">
-          <Card class="articles-card">
+    <section ref="dashboardRef" class="section fade-in">
+      <div class="section-head">
+        <h2 class="section-title">Beach Conditions Dashboard</h2>
+      </div>
+      <div class="grid panels">
+        <router-link to="/weather" class="panel">
+          <Card class="panel-card">
+            <template #header>
+              <div class="panel-head"><h5>☀️ UV Index</h5></div>
+            </template>
             <template #content>
-              <div class="article-list">
-                <div 
-                  v-for="(article, i) in articleLinks" 
-                  :key="i" 
-                  class="article-item"
-                >
-                  <a 
-                    :href="article.url" 
-                    target="_blank" 
-                    class="article-link"
-                    :aria-label="`Read article: ${article.title}`"
-                  >
-                    {{ article.title }}
-                  </a>
+              <p class="panel-sub">UV index and sun safety information</p>
+              <div class="panel-body">
+                <div v-if="isLoadingUv" class="loading">
+                  <ProgressSpinner style="width: 2rem; height: 2rem" strokeWidth="4" animationDuration="1s" />
+                  <p class="muted">Loading...</p>
+                </div>
+                <Message v-else-if="uvError" severity="error" :closable="false" class="w-100">{{ uvError }}</Message>
+                <div v-else class="kpi"><span>{{ uvIndex ?? '-' }}</span></div>
+              </div>
+            </template>
+          </Card>
+        </router-link>
+
+        <router-link to="/weather" class="panel">
+          <Card class="panel-card">
+            <template #header>
+              <div class="panel-head"><h5>🌤️ Weather Conditions</h5></div>
+            </template>
+            <template #content>
+              <p class="panel-sub">Current weather data</p>
+              <div class="panel-body">
+                <div v-if="isLoadingWeather" class="loading">
+                  <ProgressSpinner style="width: 2rem; height: 2rem" strokeWidth="4" animationDuration="1s" />
+                  <p class="muted">Loading...</p>
+                </div>
+                <Message v-else-if="weatherError" severity="error" :closable="false" class="w-100">{{ weatherError }}</Message>
+                <div v-else class="weather">
+                  <p><strong>{{ weather?.temp }}°C</strong></p>
+                  <p>{{ weather?.description }}</p>
+                  <p>Humidity: {{ weather?.humidity }}%</p>
+                  <p>Wind: {{ weather?.windSpeed }} m/s</p>
                 </div>
               </div>
             </template>
           </Card>
-        </div>
-      </section>
+        </router-link>
 
-      <Divider class="my-5" />
+        <router-link to="/safety" class="panel">
+          <Card class="panel-card">
+            <template #header>
+              <div class="panel-head"><h5>🏊 Swimming Safety</h5></div>
+            </template>
+            <template #content>
+              <p class="panel-sub">Today's safety status</p>
+              <div class="panel-body">
+                <p class="muted">Click to view full details</p>
+              </div>
+            </template>
+          </Card>
+        </router-link>
 
-      <!-- Features Section -->
-      <section class="features-section mb-5">
-        <div class="features-header">
-          <h3 class="section-subtitle">What We Provide</h3>
-        </div>
-        <div class="features-grid row text-center g-4">
-          <div v-for="(item, i) in features" :key="i" class="col-md-4">
-            <Card class="feature-card h-100">
-              <template #content>
-                <div class="feature-content">
-                  <h5 class="fw-bold mb-3">{{ item.icon }} {{ item.title }}</h5>
-                  <p class="text-muted mb-0">{{ item.description }}</p>
-                </div>
-              </template>
-            </Card>
-          </div>
-        </div>
-      </section>
+        <router-link to="/predict" class="panel">
+          <Card class="panel-card">
+            <template #header>
+              <div class="panel-head"><h5>🔮 Prediction Model Results</h5></div>
+            </template>
+            <template #content>
+              <p class="panel-sub">Water quality predictions</p>
+              <div class="panel-body">
+                <p class="muted">Click here to view forecasts</p>
+              </div>
+            </template>
+          </Card>
+        </router-link>
+      </div>
+    </section>
 
-      <Divider class="my-5" />
+    <section class="section fade-in">
+      <div class="grid one">
+        <router-link to="/recycle-quiz" class="panel">
+          <Card class="panel-card center">
+            <template #header>
+              <div class="panel-head"><h5>🗑️ Trash Quiz</h5></div>
+            </template>
+            <template #content>
+              <p class="panel-sub">Test your recycling knowledge</p>
+              <div class="panel-body"><p class="muted">Play now & learn about Aussie bin rules!</p></div>
+            </template>
+          </Card>
+        </router-link>
+      </div>
+    </section>
 
-      <!-- Audiences Section -->
-      <section class="audiences-section mb-5">
-        <div class="audiences-header">
-          <h3 class="section-subtitle">Who We Help</h3>
-        </div>
-        <div class="audiences-grid row text-center g-4">
-          <div v-for="(group, i) in audiences" :key="i" class="col-md-4">
-            <Card class="audience-card h-100">
-              <template #content>
-                <div class="audience-content">
-                  <h5 class="fw-bold mb-3">{{ group.icon }} {{ group.title }}</h5>
-                  <p class="text-muted mb-0">{{ group.description }}</p>
-                </div>
-              </template>
-            </Card>
-          </div>
-        </div>
-      </section>
+    
 
-      <!-- Footer Section -->
-      <footer class="page-footer footer text-center text-dark py-4 mt-auto">
-        <div class="footer-content">
-          <small>© 2025 AquaProtect - TA22 Team</small><br />
-          <small>Keeping families safe at Dromana Beach</small>
+    <section ref="featuresRef" class="section fade-in">
+      <div class="section-head"><h3 class="section-subtitle">What We Provide</h3></div>
+      <div class="grid three">
+        <div v-for="(item, i) in features" :key="i" class="panel">
+          <Card class="panel-card h-100">
+            <template #content>
+              <div class="tile">
+                <h5>{{ item.icon }} {{ item.title }}</h5>
+                <p class="muted">{{ item.description }}</p>
+              </div>
+            </template>
+          </Card>
         </div>
-      </footer>
+      </div>
+    </section>
 
-    </div>
+    <section class="section fade-in">
+      <div class="section-head"><h3 class="section-subtitle">Who We Help</h3></div>
+      <div class="grid three">
+        <div v-for="(group, i) in audiences" :key="i" class="panel">
+          <Card class="panel-card h-100">
+            <template #content>
+              <div class="tile">
+                <h5>{{ group.icon }} {{ group.title }}</h5>
+                <p class="muted">{{ group.description }}</p>
+              </div>
+            </template>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Articles below: back to link list -->
+    <section class="section fade-in">
+      <div class="section-head"><h3 class="section-subtitle">Articles</h3></div>
+      <ArticleSlider :articles="articleLinks" />
+    </section>
+
+    <footer class="footer">
+      <small>© 2025 AquaProtect - TA22 Team</small>
+      <small>Keeping families safe at Dromana Beach</small>
+    </footer>
   </div>
 
-  <!-- Fixed Back to Top Button -->
   <Button 
     class="back-to-top-fixed"
     icon="pi pi-arrow-up" 
@@ -265,9 +157,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import ArticleSlider from '@/components/ArticleSlider.vue';
+import HeroVideo from '@/components/HeroVideo.vue';
 
 const OPEN_WEATHER_API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY || 'a7f7e34d892b94d341f19b3252f8c992';
 const DROMANA = { lat: -38.33, lon: 145.0 };
+
+// Refs for HeroVideo scroll targets
+const dashboardRef = ref<HTMLElement | null>(null);
+const featuresRef = ref<HTMLElement | null>(null);
 
 const weather = ref<any>(null);
 const uvIndex = ref<number | null>(null);
@@ -340,506 +238,118 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.home-wrapper {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+.home {
+  --bg: #EEF2F5;
+  --panel: #FFFFFF;
+  --ink: #111827;
+  --sub: #4B5563;
+  --muted: #6B7280;
+  --radius-xl: 24px;
+  --shadow: 0 8px 28px rgba(17,24,39,.08);
+  --shadow-lg: 0 12px 40px rgba(17,24,39,.1);
+  background: var(--bg);
+  color: var(--ink);
   min-height: 100vh;
-  padding-bottom: 3rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-link {
-  text-decoration: none;
-  display: block;
-  height: 100%;
-}
-
-/* Dashboard Container */
-.dashboard-container {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border: 2px solid #dee2e6;
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 2rem;
-}
-
-.dashboard-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #007bff, #28a745, #ffc107, #dc3545);
-  border-radius: 20px 20px 0 0;
-}
-
-.dashboard-card {
-  border-radius: 1rem;
-  color: #333;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  height: 100%;
-  background: white;
-  border: none;
-}
-
-.dashboard-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-}
-
-.card-header {
-  padding: 1rem;
-  margin: 0;
-}
-
-.card-title {
-  font-weight: 700;
-  color: #fff;
-  font-size: 1.1rem;
-  margin: 0;
-  letter-spacing: -0.025em;
-}
-
-.card-subtitle {
-  font-style: italic;
-  margin-bottom: 1rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.data-box {
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  min-height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  flex-direction: column;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.data-display {
-  text-align: center;
-}
-
-.weather-data {
-  text-align: left;
-  font-size: 1rem;
-  color: #ffffff;
-  line-height: 1.5;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.weather-data p {
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-}
-
-.weather-data p strong {
-  font-size: 1.2rem;
-  font-weight: 800;
-}
-
-.data-display p {
-  font-size: 3rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.placeholder-text {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-
-/* Gradient themes for each card */
-.gradient-orange { background: linear-gradient(135deg, #f57c00, #fbc02d); }
-.gradient-blue { background: linear-gradient(135deg, #0288d1, #03a9f4); }
-.gradient-teal { background: linear-gradient(135deg, #00796b, #4db6ac); }
-.gradient-purple { background: linear-gradient(135deg, #8e24aa, #d81b60); }
-.gradient-green { background: linear-gradient(135deg, #388e3c, #66bb6a); }
-
-/* Quiz Section */
-.quiz-section {
-  text-align: center;
-}
-
-.quiz-card {
-  border-radius: 1rem;
-  color: #333;
-  overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  background: white;
-  border: none;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.quiz-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-}
-
-/* Articles Section */
-.articles-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: none;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.article-list {
-  list-style: none;
   padding: 0;
-  margin: 0;
-}
-
-.article-item {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-}
-
-.article-item:hover {
-  background-color: rgba(0, 123, 255, 0.1);
-}
-
-.article-link {
-  color: #2c3e50;
-  text-decoration: none;
-  font-weight: 600;
-  line-height: 1.5;
-  display: block;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.article-link:hover {
-  color: #007bff;
-  text-decoration: underline;
-  transform: translateX(4px);
-}
-
-/* Features and Audiences Cards */
-.feature-card,
-.audience-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: none;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.feature-card:hover,
-.audience-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
-
-.feature-content,
-.audience-content {
-  padding: 1.5rem;
-  text-align: center;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 0;
 }
 
-.feature-content h5,
-.audience-content h5 {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #2c3e50;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.025em;
+.section { 
+  max-width: 1200px; 
+  width: 100%; 
+  margin: 0 auto; 
+  padding: 3rem 1.25rem;
 }
 
-.feature-content p,
-.audience-content p {
-  color: #6c757d;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  font-weight: 400;
+/* Dashboard section 特殊样式 */
+.section:first-of-type {
+  padding-top: 3rem;
 }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; align-items: center; }
+.hero-left { padding: 2.5rem; background: var(--panel); border-radius: var(--radius-xl); box-shadow: var(--shadow); }
+.hero-right { height: 340px; border-radius: var(--radius-xl); background: var(--panel); box-shadow: var(--shadow); opacity: .6; }
+.hero-title { margin: 0 0 1rem; display: flex; flex-direction: column; gap: .25rem; }
+.hero-title .bold { font-weight: 900; font-size: 3rem; letter-spacing: -0.02em; }
+.hero-title .italic { font-style: italic; font-size: 3rem; color: var(--sub); }
+.hero-sub { color: var(--muted); font-size: 1.05rem; line-height: 1.7; margin: 0 0 1.25rem; }
+.hero-actions { display: flex; gap: .75rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 18px; border-radius: 999px; text-decoration: none; font-weight: 700; border: 1px solid transparent; transform: translateZ(0); transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease; }
+.btn.primary { background: #111827; color: #fff; box-shadow: var(--shadow); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: #E5E7EB; }
+.btn:hover { transform: scale(1.03); }
+.btn:focus-visible { outline: 3px solid #94A3B8; outline-offset: 2px; }
+
+/* Sections */
+.section-head { margin-bottom: 1.25rem; text-align: left; }
+.section-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+.section-subtitle { font-size: 1.5rem; font-weight: 700; color: var(--ink); }
+
+/* Grid */
+.grid { display: grid; gap: 1rem; }
+.grid.panels { grid-template-columns: repeat(4, 1fr); }
+.grid.one { grid-template-columns: 1fr; }
+.grid.three { grid-template-columns: repeat(3, 1fr); }
+
+/* Panel/Card */
+.panel { text-decoration: none; }
+.panel-card { background: var(--panel); border-radius: var(--radius-xl); box-shadow: var(--shadow); border: 1px solid #edf2f7; display: block; height: 100%; transition: transform .22s ease, box-shadow .22s ease; }
+.panel-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.panel-card.center { text-align: center; }
+.panel-head { padding: 1rem 1rem 0; }
+.panel-head h5 { margin: 0; font-weight: 800; letter-spacing: -0.01em; }
+.panel-sub { margin: .25rem 1rem 0; color: var(--muted); font-size: .95rem; }
+.panel-body { padding: 1rem; min-height: 120px; display: grid; place-items: center; text-align: center; }
+.loading { display: grid; place-items: center; gap: .5rem; }
+.kpi span { font-size: 2.75rem; font-weight: 900; }
+.weather { color: var(--sub); line-height: 1.6; }
+.muted { color: var(--muted); margin: 0; }
+
+/* Articles */
+.article-list { display: grid; gap: .5rem; padding: .5rem; }
+.article-item { padding: .75rem 1rem; border-radius: 14px; transition: background-color .2s ease, transform .2s ease; }
+.article-item:hover { background: #F3F4F6; transform: translateX(2px); }
+.article-link { color: var(--ink); text-decoration: none; font-weight: 600; }
+.article-link:hover { text-decoration: underline; }
+.article-link:focus-visible { outline: 3px solid #94A3B8; outline-offset: 2px; border-radius: 10px; }
+
+/* (removed) carousel styles cleaned */
+
+/* Tiles (features/audience) */
+.tile { padding: 1.25rem 1.25rem 1.5rem; text-align: center; }
+.tile h5 { margin: 0 0 .5rem; font-weight: 800; }
 
 /* Footer */
-.footer {
-  font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.3);
-  color: #2c3e50;
-  border-radius: 1rem 1rem 0 0;
-  margin-top: auto;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+.footer { max-width: 1200px; width: 100%; margin: 0 auto; background: var(--panel); border: 1px solid #edf2f7; border-radius: var(--radius-xl); box-shadow: var(--shadow); padding: 1.25rem; text-align: center; color: var(--sub); display: grid; gap: .25rem; }
+
+/* Animations */
+.fade-in { animation: fadeIn .6s ease both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Back to top */
+.back-to-top-fixed { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; box-shadow: var(--shadow); transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease; opacity: .95; }
+.back-to-top-fixed:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); opacity: 1; }
+
+/* Focus ring for panels */
+.panel:focus-visible { outline: 3px solid #94A3B8; outline-offset: 4px; border-radius: var(--radius-xl); }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid.panels { grid-template-columns: repeat(2, 1fr); }
+  .grid.three { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Navigation */
-.navigation-section {
-  margin-top: 2rem;
-  padding: 1rem 0;
-}
-
-.back-to-top-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-/* Main Typography */
-.main-title {
-  font-size: 3rem;
-  font-weight: 800;
-  color: #1565c0;
-  margin-bottom: 1rem;
-  letter-spacing: -0.05em;
-  line-height: 1.1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.main-subtitle {
-  font-size: 1.25rem;
-  font-weight: 400;
-  color: #2c3e50;
-  line-height: 1.4;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1565c0;
-  text-align: center;
-  margin-bottom: 2rem;
-  letter-spacing: -0.025em;
-}
-
-.section-subtitle {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2c3e50;
-  text-align: center;
-  margin-bottom: 2rem;
-  letter-spacing: -0.025em;
-}
-
-/* Make space for fixed button - all screen sizes */
-.container {
-  padding-right: 5rem;
-  flex: 1;
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
-  .home-wrapper {
-    padding-bottom: 2rem;
-  }
-  
-  /* Make space for fixed button */
-  .container {
-    padding-right: 4rem;
-  }
-  
-  .main-title {
-    font-size: 2.25rem;
-  }
-  
-  .main-subtitle {
-    font-size: 1.1rem;
-  }
-  
-  .section-title {
-    font-size: 1.75rem;
-  }
-  
-  .section-subtitle {
-    font-size: 1.25rem;
-  }
-  
-  .dashboard-container {
-    padding: 1.5rem;
-    border-radius: 15px;
-  }
-  
-  .quiz-card {
-    max-width: 350px;
-  }
-  
-  .dashboard-grid {
-    gap: 1rem;
-  }
-  
-  .data-box {
-    min-height: 100px;
-    padding: 1.25rem;
-  }
-  
-  .data-display p {
-    font-size: 2.75rem;
-  }
-  
-  .weather-data {
-    font-size: 0.95rem;
-  }
-  
-  .weather-data p strong {
-    font-size: 1.15rem;
-  }
-  
-  .placeholder-text {
-    font-size: 1.05rem;
-  }
-  
-  /* Adjust fixed button position on medium screens */
-  .back-to-top-fixed {
-    bottom: 1.5rem;
-    right: 1.5rem;
-  }
-  
-  .feature-content,
-  .audience-content {
-    padding: 1rem;
-  }
-  
-  .article-item {
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-  }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { height: 220px; }
 }
 
-@media (max-width: 576px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 5rem; /* Make space for fixed button */
-  }
-  
-  .main-title {
-    font-size: 1.75rem;
-  }
-  
-  .main-subtitle {
-    font-size: 1rem;
-  }
-  
-  .section-title {
-    font-size: 1.5rem;
-  }
-  
-  .section-subtitle {
-    font-size: 1.1rem;
-  }
-  
-  .dashboard-container {
-    padding: 1rem;
-    border-radius: 12px;
-  }
-  
-  .quiz-card {
-    max-width: 300px;
-  }
-  
-  .dashboard-card {
-    margin-bottom: 1rem;
-  }
-  
-  .card-title {
-    font-size: 1rem;
-  }
-  
-  .card-header {
-    padding: 0.75rem;
-  }
-  
-  .data-box {
-    min-height: 70px;
-    padding: 0.75rem;
-  }
-  
-  .data-display p {
-    font-size: 2.5rem;
-  }
-  
-  .weather-data {
-    font-size: 0.9rem;
-  }
-  
-  .weather-data p strong {
-    font-size: 1.1rem;
-  }
-  
-  .placeholder-text {
-    font-size: 1rem;
-  }
-  
-  /* Adjust fixed button position on small screens */
-  .back-to-top-fixed {
-    bottom: 1rem;
-    right: 1rem;
-    transform: scale(0.9);
-  }
-  
-}
-
-/* Fixed Back to Top Button */
-.back-to-top-fixed {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  opacity: 0.9;
-}
-
-.back-to-top-fixed:hover {
-  opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Accessibility improvements */
-.card-link:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
-  border-radius: 1rem;
-}
-
-.article-link:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
-  border-radius: 0.25rem;
-}
-
-/* Smooth transitions */
-* {
-  transition: color 0.2s ease, background-color 0.2s ease, transform 0.3s ease;
+@media (max-width: 520px) {
+  .grid.panels, .grid.three { grid-template-columns: 1fr; }
+  .hero-title .bold, .hero-title .italic { font-size: 2.1rem; }
 }
 </style>
 
